@@ -71,10 +71,10 @@ export function Chat() {
            */
           switch (type) {
             case 'success': {
-              return <div className="i-ph:check-bold text-bolt-elements-icon-success text-2xl" />;
+              return <div className="i-ph:check-bold text-bit-elements-icon-success text-2xl" />;
             }
             case 'error': {
-              return <div className="i-ph:warning-circle-bold text-bolt-elements-icon-error text-2xl" />;
+              return <div className="i-ph:warning-circle-bold text-bit-elements-icon-error text-2xl" />;
             }
           }
 
@@ -319,7 +319,7 @@ export const ChatImpl = memo(
       if (selectedElement) {
         console.log('Selected Element:', selectedElement);
 
-        const elementInfo = `<div class=\"__boltSelectedElement__\" data-element='${JSON.stringify(selectedElement)}'>${JSON.stringify(`${selectedElement.displayText}`)}</div>`;
+        const elementInfo = `<div class=\"__bitSelectedElement__\" data-element='${JSON.stringify(selectedElement)}'>${JSON.stringify(`${selectedElement.displayText}`)}</div>`;
         finalMessageContent = messageContent + elementInfo;
       }
 

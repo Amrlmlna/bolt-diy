@@ -3,18 +3,18 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { classNames } from '~/utils/classNames';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-bolt-elements-borderColor disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-bit-elements-borderColor disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       variant: {
-        default: 'bg-bolt-elements-background text-bolt-elements-textPrimary hover:bg-bolt-elements-background-depth-2',
+        default: 'bg-bit-elements-background text-bit-elements-textPrimary hover:bg-bit-elements-background-depth-2',
         destructive: 'bg-red-500 text-white hover:bg-red-600',
         outline:
-          'border border-bolt-elements-borderColor bg-transparent hover:bg-bolt-elements-background-depth-2 hover:text-bolt-elements-textPrimary text-bolt-elements-textPrimary dark:border-bolt-elements-borderColorActive',
+          'border border-bit-elements-borderColor bg-transparent hover:bg-bit-elements-background-depth-2 hover:text-bit-elements-textPrimary text-bit-elements-textPrimary dark:border-bit-elements-borderColorActive',
         secondary:
-          'bg-bolt-elements-background-depth-1 text-bolt-elements-textPrimary hover:bg-bolt-elements-background-depth-2',
-        ghost: 'hover:bg-bolt-elements-background-depth-1 hover:text-bolt-elements-textPrimary',
-        link: 'text-bolt-elements-textPrimary underline-offset-4 hover:underline',
+          'bg-bit-elements-background-depth-1 text-bit-elements-textPrimary hover:bg-bit-elements-background-depth-2',
+        ghost: 'hover:bg-bit-elements-background-depth-1 hover:text-bit-elements-textPrimary',
+        link: 'text-bit-elements-textPrimary underline-offset-4 hover:underline',
       },
       size: {
         default: 'h-9 px-4 py-2',

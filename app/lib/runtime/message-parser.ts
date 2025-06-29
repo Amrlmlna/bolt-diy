@@ -1,18 +1,18 @@
-import type { ActionType, BoltAction, BoltActionData, FileAction, ShellAction, SupabaseAction } from '~/types/actions';
-import type { BoltArtifactData } from '~/types/artifact';
+import type { ActionType, BitAction, BitActionData, FileAction, ShellAction, SupabaseAction } from '~/types/actions';
+import type { BitArtifactData } from '~/types/artifact';
 import { createScopedLogger } from '~/utils/logger';
 import { unreachable } from '~/utils/unreachable';
 
-const ARTIFACT_TAG_OPEN = '<boltArtifact';
-const ARTIFACT_TAG_CLOSE = '</boltArtifact>';
-const ARTIFACT_ACTION_TAG_OPEN = '<boltAction';
-const ARTIFACT_ACTION_TAG_CLOSE = '</boltAction>';
-const BOLT_QUICK_ACTIONS_OPEN = '<bolt-quick-actions>';
-const BOLT_QUICK_ACTIONS_CLOSE = '</bolt-quick-actions>';
+const ARTIFACT_TAG_OPEN = '<bitArtifact';
+const ARTIFACT_TAG_CLOSE = '</bitArtifact>';
+const ARTIFACT_ACTION_TAG_OPEN = '<bitAction';
+const ARTIFACT_ACTION_TAG_CLOSE = '</bitAction>';
+const BOLT_QUICK_ACTIONS_OPEN = '<bit-quick-actions>';
+const BOLT_QUICK_ACTIONS_CLOSE = '</bit-quick-actions>';
 
 const logger = createScopedLogger('MessageParser');
 
-export interface ArtifactCallbackData extends BoltArtifactData {
+export interface ArtifactCallbackData extends BitArtifactData {
   messageId: string;
 }
 
@@ -20,7 +20,7 @@ export interface ActionCallbackData {
   artifactId: string;
   messageId: string;
   actionId: string;
-  action: BoltAction;
+  action: BitAction;
 }
 
 export type ArtifactCallback = (data: ArtifactCallbackData) => void;
@@ -49,8 +49,8 @@ interface MessageState {
   position: number;
   insideArtifact: boolean;
   insideAction: boolean;
-  currentArtifact?: BoltArtifactData;
-  currentAction: BoltActionData;
+  currentArtifact?: BitArtifactData;
+  currentAction: BitActionData;
   actionId: number;
 }
 
@@ -103,8 +103,8 @@ export class StreamingMessageParser {
         if (actionsBlockEnd !== -1) {
           const actionsBlockContent = input.slice(i + BOLT_QUICK_ACTIONS_OPEN.length, actionsBlockEnd);
 
-          // Find all <bolt-quick-action ...>label</bolt-quick-action> inside
-          const quickActionRegex = /<bolt-quick-action([^>]*)>([\s\S]*?)<\/bolt-quick-action>/g;
+          // Find all <bit-quick-action ...>label</bit-quick-action> inside
+          const quickActionRegex = /<bit-quick-action([^>]*)>([\s\S]*?)<\/bit-quick-action>/g;
           let match;
           const buttons = [];
 
@@ -168,7 +168,7 @@ export class StreamingMessageParser {
                */
               actionId: String(state.actionId - 1),
 
-              action: currentAction as BoltAction,
+              action: currentAction as BitAction,
             });
 
             state.insideAction = false;
@@ -214,7 +214,7 @@ export class StreamingMessageParser {
                 artifactId: currentArtifact.id,
                 messageId,
                 actionId: String(state.actionId++),
-                action: state.currentAction as BoltAction,
+                action: state.currentAction as BitAction,
               });
 
               i = actionEndIndex + 1;
@@ -271,7 +271,7 @@ export class StreamingMessageParser {
                 id: artifactId,
                 title: artifactTitle,
                 type,
-              } satisfies BoltArtifactData;
+              } satisfies BitArtifactData;
 
               state.currentArtifact = currentArtifact;
 
@@ -371,7 +371,7 @@ export class StreamingMessageParser {
 
 const createArtifactElement: ElementFactory = (props) => {
   const elementProps = [
-    'class="__boltArtifact__"',
+    'class="__bitArtifact__"',
     ...Object.entries(props).map(([key, value]) => {
       return `data-${camelToDashCase(key)}=${JSON.stringify(value)}`;
     }),
@@ -386,8 +386,8 @@ function camelToDashCase(input: string) {
 
 function createQuickActionElement(props: Record<string, string>, label: string) {
   const elementProps = [
-    'class="__boltQuickAction__"',
-    'data-bolt-quick-action="true"',
+    'class="__bitQuickAction__"',
+    'data-bit-quick-action="true"',
     ...Object.entries(props).map(([key, value]) => `data-${camelToDashCase(key)}=${JSON.stringify(value)}`),
   ];
 
@@ -397,5 +397,5 @@ function createQuickActionElement(props: Record<string, string>, label: string) 
 }
 
 function createQuickActionGroup(buttons: string[]) {
-  return `<div class=\"__boltQuickAction__\" data-bolt-quick-action=\"true\">${buttons.join('')}</div>`;
+  return `<div class=\"__bitQuickAction__\" data-bit-quick-action=\"true\">${buttons.join('')}</div>`;
 }

@@ -30,9 +30,7 @@ export function UserMessage({ content }: UserMessageProps) {
                 loading="eager"
                 decoding="sync"
               />
-              <span className="text-bolt-elements-textPrimary text-sm">
-                {profile?.username ? profile.username : ''}
-              </span>
+              <span className="text-bit-elements-textPrimary text-sm">{profile?.username ? profile.username : ''}</span>
             </div>
           ) : (
             <div className="i-ph:user-fill text-accent-500 text-2xl" />
@@ -64,6 +62,6 @@ export function UserMessage({ content }: UserMessageProps) {
 }
 
 function stripMetadata(content: string) {
-  const artifactRegex = /<boltArtifact\s+[^>]*>[\s\S]*?<\/boltArtifact>/gm;
+  const artifactRegex = /<bitArtifact\s+[^>]*>[\s\S]*?<\/bitArtifact>/gm;
   return content.replace(MODEL_REGEX, '').replace(PROVIDER_REGEX, '').replace(artifactRegex, '');
 }

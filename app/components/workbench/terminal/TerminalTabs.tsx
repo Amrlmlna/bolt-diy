@@ -85,8 +85,8 @@ export const TerminalTabs = memo(() => {
       }}
     >
       <div className="h-full">
-        <div className="bg-bolt-elements-terminals-background h-full flex flex-col">
-          <div className="flex items-center bg-bolt-elements-background-depth-2 border-y border-bolt-elements-borderColor gap-1.5 min-h-[34px] p-2">
+        <div className="bg-bit-elements-terminals-background h-full flex flex-col">
+          <div className="flex items-center bg-bit-elements-background-depth-2 border-y border-bit-elements-borderColor gap-1.5 min-h-[34px] p-2">
             {Array.from({ length: terminalCount + 1 }, (_, index) => {
               const isActive = activeTerminal === index;
 
@@ -98,16 +98,16 @@ export const TerminalTabs = memo(() => {
                       className={classNames(
                         'flex items-center text-sm cursor-pointer gap-1.5 px-3 py-2 h-full whitespace-nowrap rounded-full',
                         {
-                          'bg-bolt-elements-terminals-buttonBackground text-bolt-elements-textSecondary hover:text-bolt-elements-textPrimary':
+                          'bg-bit-elements-terminals-buttonBackground text-bit-elements-textSecondary hover:text-bit-elements-textPrimary':
                             isActive,
-                          'bg-bolt-elements-background-depth-2 text-bolt-elements-textSecondary hover:bg-bolt-elements-terminals-buttonBackground':
+                          'bg-bit-elements-background-depth-2 text-bit-elements-textSecondary hover:bg-bit-elements-terminals-buttonBackground':
                             !isActive,
                         },
                       )}
                       onClick={() => setActiveTerminal(index)}
                     >
                       <div className="i-ph:terminal-window-duotone text-lg" />
-                      Bolt Terminal
+                      Bit Terminal
                     </button>
                   ) : (
                     <React.Fragment>
@@ -116,8 +116,8 @@ export const TerminalTabs = memo(() => {
                         className={classNames(
                           'flex items-center text-sm cursor-pointer gap-1.5 px-3 py-2 h-full whitespace-nowrap rounded-full',
                           {
-                            'bg-bolt-elements-terminals-buttonBackground text-bolt-elements-textPrimary': isActive,
-                            'bg-bolt-elements-background-depth-2 text-bolt-elements-textSecondary hover:bg-bolt-elements-terminals-buttonBackground':
+                            'bg-bit-elements-terminals-buttonBackground text-bit-elements-textPrimary': isActive,
+                            'bg-bit-elements-background-depth-2 text-bit-elements-textSecondary hover:bg-bit-elements-terminals-buttonBackground':
                               !isActive,
                           },
                         )}
@@ -143,7 +143,7 @@ export const TerminalTabs = memo(() => {
           {Array.from({ length: terminalCount + 1 }, (_, index) => {
             const isActive = activeTerminal === index;
 
-            logger.debug(`Starting bolt terminal [${index}]`);
+            logger.debug(`Starting bit terminal [${index}]`);
 
             if (index == 0) {
               return (
@@ -156,7 +156,7 @@ export const TerminalTabs = memo(() => {
                   ref={(ref) => {
                     terminalRefs.current.push(ref);
                   }}
-                  onTerminalReady={(terminal) => workbenchStore.attachBoltTerminal(terminal)}
+                  onTerminalReady={(terminal) => workbenchStore.attachBitTerminal(terminal)}
                   onTerminalResize={(cols, rows) => workbenchStore.onTerminalResize(cols, rows)}
                   theme={theme}
                 />

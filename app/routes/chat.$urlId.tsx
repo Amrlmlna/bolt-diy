@@ -43,7 +43,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
 export default function ChatPage() {
   return (
-    <div className="flex flex-col h-full w-full bg-bolt-elements-background-depth-1">
+    <div className="flex flex-col h-full w-full bg-bit-elements-background-depth-1">
       <BackgroundRays />
       <Header />
       <ClientOnly fallback={<BaseChat />}>{() => <Chat />}</ClientOnly>
