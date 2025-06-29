@@ -1,13 +1,8 @@
 import { useStore } from '@nanostores/react';
 import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import {
-  chatId as chatIdStore,
-  db,
-  description as descriptionStore,
-  getMessages,
-  updateChatDescription,
-} from '~/lib/persistence';
+import { chatId as chatIdStore, description as descriptionStore } from '~/lib/persistence';
+import { getChatFromDatabase, updateChatDescriptionInDatabase } from '~/lib/persistence/database';
 
 interface EditChatDescriptionOptions {
   initialDescription?: string;
@@ -31,7 +26,7 @@ type EditChatDescriptionHook = {
  * Offers functions to:
  * - Switch between edit and view modes.
  * - Manage input changes, blur, and form submission events.
- * - Save updates to IndexedDB and optionally to the global application state.
+ * - Save updates to database and optionally to the global application state.
  *
  * @param {Object} options
  * @param {string} options.initialDescription - The current chat description.
@@ -64,18 +59,18 @@ export function useEditChatDescription({
   }, []);
 
   const fetchLatestDescription = useCallback(async () => {
-    if (!db || !chatId) {
+    if (!chatId) {
       return initialDescription;
     }
 
     try {
-      const chat = await getMessages(db, chatId);
+      const chat = await getChatFromDatabase(chatId);
       return chat?.description || initialDescription;
     } catch (error) {
       console.error('Failed to fetch latest description:', error);
       return initialDescription;
     }
-  }, [db, chatId, initialDescription]);
+  }, [chatId, initialDescription]);
 
   const handleBlur = useCallback(async () => {
     const latestDescription = await fetchLatestDescription();
@@ -118,17 +113,12 @@ export function useEditChatDescription({
       }
 
       try {
-        if (!db) {
-          toast.error('Chat persistence is not available');
-          return;
-        }
-
         if (!chatId) {
           toast.error('Chat Id is not available');
           return;
         }
 
-        await updateChatDescription(db, chatId, currentDescription);
+        await updateChatDescriptionInDatabase(chatId, currentDescription);
 
         if (syncWithGlobalStore) {
           descriptionStore.set(currentDescription);
@@ -141,7 +131,7 @@ export function useEditChatDescription({
 
       toggleEditMode();
     },
-    [currentDescription, db, chatId, initialDescription, customChatId],
+    [currentDescription, chatId, initialDescription, customChatId],
   );
 
   const handleKeyDown = useCallback(

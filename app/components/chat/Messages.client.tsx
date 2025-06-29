@@ -4,12 +4,12 @@ import { classNames } from '~/utils/classNames';
 import { AssistantMessage } from './AssistantMessage';
 import { UserMessage } from './UserMessage';
 import { useLocation } from '@remix-run/react';
-import { db, chatId } from '~/lib/persistence/useChatHistory';
-import { forkChat } from '~/lib/persistence/db';
+import { chatId } from '~/lib/persistence/useChatHistory';
 import { toast } from 'react-toastify';
 import { forwardRef } from 'react';
 import type { ForwardedRef } from 'react';
 import type { ProviderInfo } from '~/types/model';
+import { supabase } from '~/lib/supabaseClient';
 
 interface MessagesProps {
   id?: string;
@@ -36,12 +36,33 @@ export const Messages = forwardRef<HTMLDivElement, MessagesProps>(
 
     const handleFork = async (messageId: string) => {
       try {
-        if (!db || !chatId.get()) {
-          toast.error('Chat persistence is not available');
+        const currentChatId = chatId.get();
+        if (!currentChatId) {
+          toast.error('Chat ID is not available');
           return;
         }
-
-        const urlId = await forkChat(db, chatId.get()!, messageId);
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+        const accessToken = session?.access_token;
+        if (!accessToken) {
+          toast.error('Not authenticated');
+          return;
+        }
+        const response = await fetch('/api/chat-fork', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify({ chatId: currentChatId, messageId }),
+        });
+        if (!response.ok) {
+          const msg = await response.text();
+          toast.error('Failed to fork chat: ' + msg);
+          return;
+        }
+        const { urlId } = (await response.json()) as { urlId: string; id: string };
         window.location.href = `/chat/${urlId}`;
       } catch (error) {
         toast.error('Failed to fork chat: ' + (error as Error).message);

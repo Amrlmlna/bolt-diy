@@ -101,7 +101,9 @@ const processSampledMessages = createSampler(
     parseMessages(messages, isLoading);
 
     if (messages.length > initialMessages.length) {
-      storeMessageHistory(messages).catch((error) => toast.error(error.message));
+      storeMessageHistory(messages).catch((error) => {
+        console.error('Failed to store message history:', error);
+      });
     }
   },
   50,
