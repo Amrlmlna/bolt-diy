@@ -12,6 +12,9 @@ import { WORK_DIR } from '~/utils/constants';
 import { createSummary } from '~/lib/.server/llm/create-summary';
 import { extractPropertiesFromMessage } from '~/lib/.server/llm/utils';
 import type { DesignScheme } from '~/types/design-scheme';
+import { getUserIdFromRequest } from '~/lib/auth/getUserId';
+import { prisma } from '~/lib/.server/prisma';
+import { nanoid } from 'nanoid';
 
 export async function action(args: ActionFunctionArgs) {
   return chatAction(args);
@@ -200,6 +203,37 @@ async function chatAction({ context, request }: ActionFunctionArgs) {
               cumulativeUsage.completionTokens += usage.completionTokens || 0;
               cumulativeUsage.promptTokens += usage.promptTokens || 0;
               cumulativeUsage.totalTokens += usage.totalTokens || 0;
+            }
+
+            // Save chat to database after streaming completes
+            try {
+              const userId = await getUserIdFromRequest(request);
+              if (userId) {
+                // Generate urlId dan description
+                let urlId: string | undefined = undefined;
+                let description: string | undefined = undefined;
+                const firstMsg = Array.isArray(messages)
+                  ? messages.find((m: any) => m && (m.role === 'user' || m.role === 'assistant'))
+                  : undefined;
+                if (firstMsg) {
+                  urlId = nanoid(8);
+                  description = firstMsg.content?.slice(0, 40) ?? 'Untitled Chat';
+                } else {
+                  urlId = nanoid(8);
+                  description = 'Untitled Chat';
+                }
+
+                await prisma.chat.create({
+                  data: {
+                    userId,
+                    messages: messages as any,
+                    urlId,
+                    description,
+                  },
+                });
+              }
+            } catch (error) {
+              logger.error('Failed to save chat to database:', error);
             }
 
             if (finishReason !== 'length') {
