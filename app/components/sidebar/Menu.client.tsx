@@ -55,7 +55,7 @@ function CurrentDateTime() {
   }, []);
 
   return (
-    <div className="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 dark:text-gray-400 border-b border-gray-100 dark:border-gray-800/50">
+    <div className="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 dark:text-gray-400 border-b border-gray-100 dark:border-gray-800/50 font-montserrat">
       <div className="h-4 w-4 i-ph:clock opacity-80" />
       <div className="flex gap-2">
         <span>{dateTime.toLocaleDateString()}</span>
@@ -351,7 +351,7 @@ export function Menu() {
         <div className="h-12 flex items-center justify-between px-4 border-b border-gray-100 dark:border-gray-800/50 bg-gray-50/50 dark:bg-gray-900/50 rounded-tr-2xl">
           <div className="text-gray-900 dark:text-white font-medium"></div>
           <div className="flex items-center gap-3">
-            <span className="font-medium text-sm text-gray-900 dark:text-white truncate">
+            <span className="font-medium text-sm text-gray-900 dark:text-white truncate font-montserrat">
               {profile?.username || 'Guest User'}
             </span>
             <div className="flex items-center justify-center w-[32px] h-[32px] overflow-hidden bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-500 rounded-full shrink-0">
@@ -375,7 +375,7 @@ export function Menu() {
             <div className="flex gap-2">
               <a
                 href="/"
-                className="flex-1 flex gap-2 items-center bg-purple-50 dark:bg-purple-500/10 text-purple-700 dark:text-purple-300 hover:bg-purple-100 dark:hover:bg-purple-500/20 rounded-lg px-4 py-2 transition-colors"
+                className="flex-1 flex gap-2 items-center bg-primary-50 dark:bg-primary-500/10 text-primary-700 dark:text-primary-300 hover:bg-primary-100 dark:hover:bg-primary-500/20 rounded-lg px-4 py-2 transition-colors font-montserrat"
               >
                 <span className="inline-block i-ph:plus-circle h-4 w-4" />
                 <span className="text-sm font-medium">Start new chat</span>
@@ -383,9 +383,9 @@ export function Menu() {
               <button
                 onClick={toggleSelectionMode}
                 className={classNames(
-                  'flex gap-1 items-center rounded-lg px-3 py-2 transition-colors',
+                  'flex gap-1 items-center rounded-lg px-3 py-2 transition-colors font-montserrat',
                   selectionMode
-                    ? 'bg-purple-600 dark:bg-purple-500 text-white border border-purple-700 dark:border-purple-600'
+                    ? 'bg-primary-600 dark:bg-primary-500 text-white border border-primary-700 dark:border-primary-600'
                     : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700',
                 )}
                 aria-label={selectionMode ? 'Exit selection mode' : 'Enter selection mode'}
@@ -398,7 +398,7 @@ export function Menu() {
                 <span className="i-ph:magnifying-glass h-4 w-4 text-gray-400 dark:text-gray-500" />
               </div>
               <input
-                className="w-full bg-gray-50 dark:bg-gray-900 relative pl-9 pr-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-purple-500/50 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-500 border border-gray-200 dark:border-gray-800"
+                className="w-full bg-gray-50 dark:bg-gray-900 relative pl-9 pr-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary-500/50 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-500 border border-gray-200 dark:border-gray-800 font-montserrat"
                 type="search"
                 placeholder="Search chats..."
                 onChange={handleSearchChange}
@@ -407,10 +407,10 @@ export function Menu() {
             </div>
           </div>
           <div className="flex items-center justify-between text-sm px-4 py-2">
-            <div className="font-medium text-gray-600 dark:text-gray-400">Your Chats</div>
+            <div className="font-medium text-gray-600 dark:text-gray-400 font-montserrat">Your Chats</div>
             {selectionMode && (
               <div className="flex items-center gap-2">
-                <Button variant="ghost" size="sm" onClick={selectAll}>
+                <Button variant="ghost" size="sm" onClick={selectAll} className="font-montserrat">
                   {selectedItems.length === filteredList.length ? 'Deselect all' : 'Select all'}
                 </Button>
                 <Button
@@ -418,6 +418,7 @@ export function Menu() {
                   size="sm"
                   onClick={handleBulkDeleteClick}
                   disabled={selectedItems.length === 0}
+                  className="font-montserrat"
                 >
                   Delete selected
                 </Button>
@@ -470,8 +471,8 @@ export function Menu() {
                   {dialogContent?.type === 'delete' && (
                     <>
                       <div className="p-6 bg-white dark:bg-gray-950">
-                        <DialogTitle className="text-gray-900 dark:text-white">Delete Chat?</DialogTitle>
-                        <DialogDescription className="mt-2 text-gray-600 dark:text-gray-400">
+                        <DialogTitle className="text-gray-900 dark:text-white font-poppins">Delete Chat?</DialogTitle>
+                        <DialogDescription className="mt-2 text-gray-600 dark:text-gray-400 font-montserrat">
                           <p>
                             You are about to delete{' '}
                             <span className="font-medium text-gray-900 dark:text-white">
@@ -501,8 +502,10 @@ export function Menu() {
                   {dialogContent?.type === 'bulkDelete' && (
                     <>
                       <div className="p-6 bg-white dark:bg-gray-950">
-                        <DialogTitle className="text-gray-900 dark:text-white">Delete Selected Chats?</DialogTitle>
-                        <DialogDescription className="mt-2 text-gray-600 dark:text-gray-400">
+                        <DialogTitle className="text-gray-900 dark:text-white font-poppins">
+                          Delete Selected Chats?
+                        </DialogTitle>
+                        <DialogDescription className="mt-2 text-gray-600 dark:text-gray-400 font-montserrat">
                           <p>
                             You are about to delete {dialogContent.items.length}{' '}
                             {dialogContent.items.length === 1 ? 'chat' : 'chats'}:
@@ -510,7 +513,7 @@ export function Menu() {
                           <div className="mt-2 max-h-32 overflow-auto border border-gray-100 dark:border-gray-800 rounded-md bg-gray-50 dark:bg-gray-900 p-2">
                             <ul className="list-disc pl-5 space-y-1">
                               {dialogContent.items.map((item) => (
-                                <li key={item.id} className="text-sm">
+                                <li key={item.id} className="text-sm font-montserrat">
                                   <span className="font-medium text-gray-900 dark:text-white">{item.description}</span>
                                 </li>
                               ))}
@@ -556,17 +559,19 @@ export function Menu() {
       {/* Settings Dialog */}
       <DialogRoot open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
         <Dialog>
-          <DialogTitle>Settings</DialogTitle>
+          <DialogTitle className="font-poppins">Settings</DialogTitle>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-700 dark:text-gray-300">Dark Mode</span>
+              <span className="text-sm text-gray-700 dark:text-gray-300 font-montserrat">Dark Mode</span>
               <ThemeSwitch />
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-700 dark:text-gray-300">Profile</span>
+              <span className="text-sm text-gray-700 dark:text-gray-300 font-montserrat">Profile</span>
               <div className="flex items-center space-x-2">
                 {profile.avatar && <img src={profile.avatar} alt="Profile" className="w-6 h-6 rounded-full" />}
-                <span className="text-sm text-gray-600 dark:text-gray-400">{profile.username || 'User'}</span>
+                <span className="text-sm text-gray-600 dark:text-gray-400 font-montserrat">
+                  {profile.username || 'User'}
+                </span>
               </div>
             </div>
           </div>
@@ -581,7 +586,7 @@ export function Menu() {
       {/* Control Panel Dialog */}
       <DialogRoot open={isSettingsOpen} onOpenChange={setIsSettingsOpen}>
         <Dialog>
-          <DialogTitle>Control Panel</DialogTitle>
+          <DialogTitle className="font-poppins">Control Panel</DialogTitle>
           <ControlPanel open={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
           <div className="flex justify-end mt-4">
             <DialogButton type="secondary" onClick={() => setIsSettingsOpen(false)}>

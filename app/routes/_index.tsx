@@ -93,8 +93,8 @@ function LandingPageContent() {
         <div className="flex flex-col items-center space-y-6">
           <LottieSpinner size={96} />
           <div className="text-center">
-            <h1 className="text-2xl font-bold text-primary-500 mb-2">Loading BIT Studio</h1>
-            <p className="text-gray-400">Preparing your development environment...</p>
+            <h1 className="text-2xl font-bold text-primary-500 mb-2 font-poppins">Loading BIT Studio</h1>
+            <p className="text-gray-400 font-montserrat">Preparing your development environment...</p>
           </div>
         </div>
       </div>
@@ -110,12 +110,12 @@ function LandingPageContent() {
           <LottieSpinner size={72} className="mb-4" />
 
           {/* Title */}
-          <h1 className="text-4xl md:text-5xl font-extrabold text-primary-500 drop-shadow text-center mb-2">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-primary-500 drop-shadow text-center mb-2 font-poppins">
             BIT Studio
           </h1>
 
           {/* Subtitle */}
-          <p className="text-lg text-gray-300 text-center max-w-xl mb-2">
+          <p className="text-lg text-gray-300 text-center max-w-xl mb-2 font-montserrat">
             Platform AI-powered untuk developer modern. Tanyakan apapun, generate kode, desain, dan solusi instan.
           </p>
         </div>
@@ -124,7 +124,7 @@ function LandingPageContent() {
         <div className="relative w-full max-w-4xl mx-auto rounded-3xl bg-card shadow-2xl px-8 py-8 flex flex-col gap-4">
           <div className="relative">
             <input
-              className="w-full bg-transparent text-lg text-white outline-none border-none"
+              className="w-full bg-transparent text-lg text-white outline-none border-none font-montserrat"
               placeholder=""
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
@@ -133,14 +133,14 @@ function LandingPageContent() {
             />
             {!prompt && (
               <div className="absolute inset-0 pointer-events-none">
-                <span className="text-lg text-gray-400">
+                <span className="text-lg text-gray-400 font-montserrat">
                   <TypingEffect />
                 </span>
               </div>
             )}
           </div>
           <div className="flex items-center justify-between mt-2">
-            <button className="flex items-center gap-2 px-3 py-1 bg-card border border-gray-700 rounded-full text-gray-300 text-sm">
+            <button className="flex items-center gap-2 px-3 py-1 bg-card border border-gray-700 rounded-full text-gray-300 text-sm font-montserrat">
               <span className="text-lg">+</span> Public
             </button>
             <button
