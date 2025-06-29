@@ -3,6 +3,32 @@ import { getUserIdFromRequest } from '~/lib/auth/getUserId';
 import { prisma } from '~/lib/.server/prisma';
 import type { Message } from 'ai';
 
+// Helper to ensure user exists in User table
+async function ensureUserInDb(userId: string, email?: string) {
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user) {
+    await prisma.user.create({
+      data: {
+        id: userId,
+        email: email || '',
+      },
+    });
+  }
+}
+
+// Helper to extract email from Supabase JWT (if available)
+function getEmailFromJwt(request: Request): string | undefined {
+  const authHeader = request.headers.get('Authorization');
+  if (!authHeader) return undefined;
+  try {
+    const token = authHeader.replace('Bearer ', '').trim();
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.email;
+  } catch {
+    return undefined;
+  }
+}
+
 // GET handler to fetch all chat histories for the authenticated user
 export async function loader({ request }: LoaderFunctionArgs) {
   const userId = await getUserIdFromRequest(request);
@@ -43,6 +69,10 @@ export async function action({ request }: ActionFunctionArgs) {
   const method = request.method;
 
   try {
+    // Always ensure user exists before any chat upsert/create
+    const email = getEmailFromJwt(request);
+    await ensureUserInDb(userId, email);
+
     if (method === 'POST') {
       // Save chat
       const body = await request.json();
