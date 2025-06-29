@@ -72,6 +72,8 @@ body {
   scrollbar-color: color-mix(in srgb, var(--bolt-elements-textPrimary), transparent 50%) transparent;
 }
 
+// Bit Studio Fonts
+
 @font-face {
   font-family: 'Montserrat';
   src: url('/fonts/Montserrat/Montserrat-VariableFont_wght.ttf') format('truetype');
@@ -86,7 +88,6 @@ body {
   font-display: swap;
 }
 
-/* Font-face Poppins */
 @font-face {
   font-family: 'Poppins';
   src: url('/fonts/Poppins-Full-Version/Poppins-Full-Version/Desktop Fonts/Poppins/Poppins-Regular.ttf')
@@ -100,6 +101,8 @@ body {
   font-weight: 700;
   font-display: swap;
 }
+
+/* Bit Studio Fonts */
 
 html,
 body {

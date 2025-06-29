@@ -1,5 +1,3 @@
-'use client';
-
 /*
  * @ts-nocheck
  * Preventing TS checks with files presented in the video for a better presentation.
@@ -35,18 +33,8 @@ import { StickToBottom, useStickToBottomContext } from '~/lib/hooks';
 import { ChatBox } from './ChatBox';
 import type { DesignScheme } from '~/types/design-scheme';
 import type { ElementInfo } from '~/components/workbench/Inspector';
-import { LottieSpinner } from '~/components/ui/LottieSpinner';
-import type { SpeechRecognition } from 'web-speech-api';
 
 const TEXTAREA_MIN_HEIGHT = 76;
-
-const TYPING_PROMPTS = [
-  'Buatkan landing page React modern',
-  'Generate kode API Express untuk login user',
-  'Tulis fungsi sorting array di Python',
-  'Buatkan desain UI dashboard analytics',
-  'Tanya apapun ke AI kami...',
-];
 
 interface BaseChatProps {
   textareaRef?: React.RefObject<HTMLTextAreaElement> | undefined;
@@ -109,6 +97,8 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
       input = '',
       enhancingPrompt,
       handleInputChange,
+
+      // promptEnhanced,
       enhancePrompt,
       sendMessage,
       handleStop,
@@ -346,92 +336,22 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
     const baseChat = (
       <div
         ref={ref}
-        className={classNames(styles.BaseChat, 'relative flex h-full w-full overflow-hidden bg-background')}
+        className={classNames(styles.BaseChat, 'relative flex h-full w-full overflow-hidden')}
         data-chat-visible={showChat}
       >
         <ClientOnly>{() => <Menu />}</ClientOnly>
         <div className="flex flex-col lg:flex-row overflow-y-auto w-full h-full">
           <div className={classNames(styles.Chat, 'flex flex-col flex-grow lg:min-w-[var(--chat-min-width)] h-full')}>
             {!chatStarted && (
-              <div id="intro" className="flex flex-col items-center justify-center min-h-screen pt-32 pb-12">
-                {/* Logo/Spinner - Consistent with BIT Studio branding */}
-                <LottieSpinner size={72} className="mb-4" />
-
-                {/* Title */}
-                <h1 className="text-4xl md:text-5xl font-extrabold text-primary-500 drop-shadow text-center mb-2">
-                  BIT Studio
+              <div id="intro" className="mt-[16vh] max-w-2xl mx-auto text-center px-4 lg:px-0">
+                <h1 className="text-3xl lg:text-6xl font-bold text-bolt-elements-textPrimary mb-4 animate-fade-in">
+                  Where ideas begin
                 </h1>
-
-                {/* Subtitle */}
-                <p className="text-lg text-gray-300 text-center max-w-xl mb-8">
-                  Platform AI-powered untuk developer modern. Tanyakan apapun, generate kode, desain, dan solusi instan.
+                <p className="text-md lg:text-xl mb-8 text-bolt-elements-textSecondary animate-fade-in animation-delay-200">
+                  Bring ideas to life in seconds or get help on existing projects.
                 </p>
-
-                {/* Chatbox Hero - Original single input design with all features */}
-                <div className="relative w-full max-w-4xl mx-auto rounded-3xl bg-card shadow-2xl px-8 py-8 flex flex-col gap-4">
-                  {/* Model and Provider Selection */}
-                  <ChatBox
-                    isModelSettingsCollapsed={isModelSettingsCollapsed}
-                    setIsModelSettingsCollapsed={setIsModelSettingsCollapsed}
-                    provider={provider}
-                    setProvider={setProvider}
-                    providerList={providerList || (PROVIDER_LIST as ProviderInfo[])}
-                    model={model}
-                    setModel={setModel}
-                    modelList={modelList}
-                    apiKeys={apiKeys}
-                    isModelLoading={isModelLoading}
-                    onApiKeysChange={onApiKeysChange}
-                    uploadedFiles={uploadedFiles}
-                    setUploadedFiles={setUploadedFiles}
-                    imageDataList={imageDataList}
-                    setImageDataList={setImageDataList}
-                    textareaRef={textareaRef}
-                    input={input}
-                    handleInputChange={handleInputChange}
-                    handlePaste={handlePaste}
-                    TEXTAREA_MIN_HEIGHT={TEXTAREA_MIN_HEIGHT}
-                    TEXTAREA_MAX_HEIGHT={TEXTAREA_MAX_HEIGHT}
-                    isStreaming={isStreaming}
-                    handleStop={handleStop}
-                    handleSendMessage={handleSendMessage}
-                    enhancingPrompt={enhancingPrompt}
-                    enhancePrompt={enhancePrompt}
-                    isListening={isListening}
-                    startListening={startListening}
-                    stopListening={stopListening}
-                    chatStarted={chatStarted}
-                    exportChat={exportChat}
-                    qrModalOpen={qrModalOpen}
-                    setQrModalOpen={setQrModalOpen}
-                    handleFileUpload={handleFileUpload}
-                    chatMode={chatMode}
-                    setChatMode={setChatMode}
-                    designScheme={designScheme}
-                    setDesignScheme={setDesignScheme}
-                    selectedElement={selectedElement}
-                    setSelectedElement={setSelectedElement}
-                    heroMode={true}
-                    showTypingEffect={true}
-                    typingPrompts={TYPING_PROMPTS}
-                  />
-                </div>
-
-                {/* Example prompts */}
-                <div id="examples" className="relative w-full max-w-xl mx-auto mt-8 flex justify-center">
-                  <div className="flex flex-col space-y-2 [mask-image:linear-gradient(to_bottom,black_0%,transparent_180%)] hover:[mask-image:none]">
-                    {ExamplePrompts((event, messageInput) => {
-                      if (isStreaming) {
-                        handleStop?.();
-                        return;
-                      }
-                      handleSendMessage?.(event, messageInput);
-                    })}
-                  </div>
-                </div>
               </div>
             )}
-
             <StickToBottom
               className={classNames('pt-6 px-2 sm:px-6 relative', {
                 'h-full flex flex-col modern-scrollbar': chatStarted,
@@ -496,56 +416,48 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
                   )}
                 </div>
                 {progressAnnotations && <ProgressCompilation data={progressAnnotations} />}
-                {chatStarted && (
-                  <div className="relative w-full max-w-chat mx-auto z-prompt">
-                    <div className="shadow-sm border border-gray-700 bg-card backdrop-filter backdrop-blur-[8px] rounded-lg overflow-hidden">
-                      <ChatBox
-                        isModelSettingsCollapsed={isModelSettingsCollapsed}
-                        setIsModelSettingsCollapsed={setIsModelSettingsCollapsed}
-                        provider={provider}
-                        setProvider={setProvider}
-                        providerList={providerList || (PROVIDER_LIST as ProviderInfo[])}
-                        model={model}
-                        setModel={setModel}
-                        modelList={modelList}
-                        apiKeys={apiKeys}
-                        isModelLoading={isModelLoading}
-                        onApiKeysChange={onApiKeysChange}
-                        uploadedFiles={uploadedFiles}
-                        setUploadedFiles={setUploadedFiles}
-                        imageDataList={imageDataList}
-                        setImageDataList={setImageDataList}
-                        textareaRef={textareaRef}
-                        input={input}
-                        handleInputChange={handleInputChange}
-                        handlePaste={handlePaste}
-                        TEXTAREA_MIN_HEIGHT={TEXTAREA_MIN_HEIGHT}
-                        TEXTAREA_MAX_HEIGHT={TEXTAREA_MAX_HEIGHT}
-                        isStreaming={isStreaming}
-                        handleStop={handleStop}
-                        handleSendMessage={handleSendMessage}
-                        enhancingPrompt={enhancingPrompt}
-                        enhancePrompt={enhancePrompt}
-                        isListening={isListening}
-                        startListening={startListening}
-                        stopListening={stopListening}
-                        chatStarted={chatStarted}
-                        exportChat={exportChat}
-                        qrModalOpen={qrModalOpen}
-                        setQrModalOpen={setQrModalOpen}
-                        handleFileUpload={handleFileUpload}
-                        chatMode={chatMode}
-                        setChatMode={setChatMode}
-                        designScheme={designScheme}
-                        setDesignScheme={setDesignScheme}
-                        selectedElement={selectedElement}
-                        setSelectedElement={setSelectedElement}
-                        heroMode={false}
-                      />
-                    </div>
-                    <div className="bg-background pb-6">{/* Ghost Element */}</div>
-                  </div>
-                )}
+                <ChatBox
+                  isModelSettingsCollapsed={isModelSettingsCollapsed}
+                  setIsModelSettingsCollapsed={setIsModelSettingsCollapsed}
+                  provider={provider}
+                  setProvider={setProvider}
+                  providerList={providerList || (PROVIDER_LIST as ProviderInfo[])}
+                  model={model}
+                  setModel={setModel}
+                  modelList={modelList}
+                  apiKeys={apiKeys}
+                  isModelLoading={isModelLoading}
+                  onApiKeysChange={onApiKeysChange}
+                  uploadedFiles={uploadedFiles}
+                  setUploadedFiles={setUploadedFiles}
+                  imageDataList={imageDataList}
+                  setImageDataList={setImageDataList}
+                  textareaRef={textareaRef}
+                  input={input}
+                  handleInputChange={handleInputChange}
+                  handlePaste={handlePaste}
+                  TEXTAREA_MIN_HEIGHT={TEXTAREA_MIN_HEIGHT}
+                  TEXTAREA_MAX_HEIGHT={TEXTAREA_MAX_HEIGHT}
+                  isStreaming={isStreaming}
+                  handleStop={handleStop}
+                  handleSendMessage={handleSendMessage}
+                  enhancingPrompt={enhancingPrompt}
+                  enhancePrompt={enhancePrompt}
+                  isListening={isListening}
+                  startListening={startListening}
+                  stopListening={stopListening}
+                  chatStarted={chatStarted}
+                  exportChat={exportChat}
+                  qrModalOpen={qrModalOpen}
+                  setQrModalOpen={setQrModalOpen}
+                  handleFileUpload={handleFileUpload}
+                  chatMode={chatMode}
+                  setChatMode={setChatMode}
+                  designScheme={designScheme}
+                  setDesignScheme={setDesignScheme}
+                  selectedElement={selectedElement}
+                  setSelectedElement={setSelectedElement}
+                />
               </div>
             </StickToBottom>
             <div className="flex flex-col justify-center">
@@ -555,7 +467,18 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
                   <GitCloneButton importChat={importChat} />
                 </div>
               )}
-              <div className="flex flex-col gap-5">{!chatStarted && <StarterTemplates />}</div>
+              <div className="flex flex-col gap-5">
+                {!chatStarted &&
+                  ExamplePrompts((event, messageInput) => {
+                    if (isStreaming) {
+                      handleStop?.();
+                      return;
+                    }
+
+                    handleSendMessage?.(event, messageInput);
+                  })}
+                {!chatStarted && <StarterTemplates />}
+              </div>
             </div>
           </div>
           <ClientOnly>
@@ -582,9 +505,9 @@ function ScrollToBottom() {
   return (
     !isAtBottom && (
       <>
-        <div className="sticky bottom-0 left-0 right-0 bg-gradient-to-t from-background to-transparent h-20 z-10" />
+        <div className="sticky bottom-0 left-0 right-0 bg-gradient-to-t from-bolt-elements-background-depth-1 to-transparent h-20 z-10" />
         <button
-          className="sticky z-50 bottom-0 left-0 right-0 text-4xl rounded-lg px-1.5 py-0.5 flex items-center justify-center mx-auto gap-2 bg-card border border-gray-700 text-white text-sm hover:bg-gray-700 transition-colors"
+          className="sticky z-50 bottom-0 left-0 right-0 text-4xl rounded-lg px-1.5 py-0.5 flex items-center justify-center mx-auto gap-2 bg-bolt-elements-background-depth-2 border border-bolt-elements-borderColor text-bolt-elements-textPrimary text-sm"
           onClick={() => scrollToBottom()}
         >
           Go to last message
